@@ -32,6 +32,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import net.shibboleth.utilities.java.support.xml.SerializeSupport;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
 import org.opensaml.core.xml.io.Marshaller;
@@ -211,7 +212,7 @@ public class EidasResponse
       try (ByteArrayOutputStream bout = new ByteArrayOutputStream())
       {
         trans.transform(new DOMSource(all), new StreamResult(bout));
-        returnValue = bout.toByteArray();
+        returnValue = stripCR(bout.toByteArray());
       }
     }
     return returnValue;
@@ -237,6 +238,7 @@ public class EidasResponse
     }
     String assoTemp = TemplateLoader.getTemplateByName("asso");
     assoTemp = assoTemp.replace("$NameFormat", nameId.getType().value);
+    assoTemp = assoTemp.replace("$NameQualifier", issuer);
     assoTemp = assoTemp.replace("$NameID", nameId.getValue());
     assoTemp = assoTemp.replace("$AssertionId", "_" + Utils.generateUniqueID());
     assoTemp = assoTemp.replace("$Recipient", recipient);
@@ -285,16 +287,21 @@ public class EidasResponse
       Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(metadataRoot);
       Response resp = (Response)unmarshaller.unmarshall(metadataRoot);
 
-      XMLSignatureHandler.addSignature(resp,
-                                       signer.getSigKey(),
-                                       signer.getSigCert(),
-                                       signer.getSigType(),
-                                       signer.getSigDigestAlg());
       for ( Assertion a : assertions )
       {
         a.setParent(null);
         resp.getEncryptedAssertions().add(this.encrypter.encrypter.encrypt(a));
       }
+
+      //Removing CR
+      resp = removeAllCarigeReturnElements(resp, ppMgr);
+
+      //Add signature object after the Encrypted assertions are added and CR characters removed.
+      XMLSignatureHandler.addSignature(resp,
+              signer.getSigKey(),
+              signer.getSigCert(),
+              signer.getSigType(),
+              signer.getSigDigestAlg());
 
       if (resp.getSignature() != null)
       {
@@ -317,11 +324,40 @@ public class EidasResponse
       try (ByteArrayOutputStream bout = new ByteArrayOutputStream())
       {
         trans.transform(new DOMSource(all), new StreamResult(bout));
-        returnValue = bout.toByteArray();
+        //Remove CR from signature value
+        returnValue = stripCR(bout.toByteArray());
       }
     }
     return returnValue;
   }
+
+  private Response removeAllCarigeReturnElements(Response response, BasicParserPool ppMgr) throws IOException, XMLParserException, UnmarshallingException, MarshallingException {
+
+    Marshaller rm = XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(response.getElementQName());
+    String responseStr = stripCR(SerializeSupport.nodeToString(rm.marshall(response)));
+
+    try (InputStream is = new ByteArrayInputStream(responseStr.getBytes(StandardCharsets.UTF_8)))
+    {
+      Document inCommonMDDoc = ppMgr.parse(is);
+      Element responseElement = inCommonMDDoc.getDocumentElement();
+      // Get apropriate unmarshaller
+      UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
+      Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(responseElement);
+      return  (Response)unmarshaller.unmarshall(responseElement);
+    }
+
+  }
+
+  private String stripCR (String stringWithCrEntity){
+    String stripped = stringWithCrEntity.replaceAll("&#13;","").replaceAll("&#xd;","").replaceAll("&#xD;","");
+    return stripped;
+  }
+
+  private byte[] stripCR(byte[] toByteArray) {
+    return stripCR(new String (toByteArray, StandardCharsets.UTF_8)).getBytes(StandardCharsets.UTF_8);
+  }
+
+
 
   public String getId()
   {
@@ -570,10 +606,14 @@ public class EidasResponse
 
   private static String getAudience(Response resp) throws ErrorCodeException
   {
+    if (resp.getAssertions().isEmpty()){
+      // The process below is only applicable when the response contains at least one Assertion element.
+      return null;
+    }
     return resp.getAssertions()
                .stream()
                .findFirst()
-               .orElseThrow(() -> new ErrorCodeException(ErrorCode.ERROR, "Missing Assertion in response."))
+               .orElseThrow(() -> new ErrorCodeException(ErrorCode.ERROR, "Expected Assertion in response."))
                .getConditions()
                .getAudienceRestrictions()
                .stream()

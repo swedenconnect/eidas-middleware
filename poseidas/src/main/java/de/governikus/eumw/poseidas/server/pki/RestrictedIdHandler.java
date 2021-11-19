@@ -19,11 +19,14 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.bouncycastle.cms.CMSException;
 
 import de.governikus.eumw.poseidas.cardbase.asn1.OID;
 import de.governikus.eumw.poseidas.cardbase.asn1.npa.ECCVCertificate;
@@ -36,6 +39,8 @@ import de.governikus.eumw.poseidas.gov2server.constants.admin.GlobalManagementCo
 import de.governikus.eumw.poseidas.gov2server.constants.admin.IDManagementCodes;
 import de.governikus.eumw.poseidas.server.idprovider.config.EPAConnectorConfigurationDto;
 import de.governikus.eumw.poseidas.server.idprovider.config.SslKeysDto;
+import de.governikus.eumw.poseidas.server.monitoring.SNMPConstants;
+import de.governikus.eumw.poseidas.server.monitoring.SNMPTrapSender;
 import de.governikus.eumw.poseidas.server.pki.caserviceaccess.PKIServiceConnector;
 import de.governikus.eumw.poseidas.server.pki.caserviceaccess.RestrictedIdServiceWrapper;
 import de.governikus.eumw.poseidas.server.pki.caserviceaccess.RestrictedIdServiceWrapper.BlackListResult;
@@ -222,6 +227,7 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
   Set<ByteBuffer> requestBlackList(boolean all, boolean delta) throws GovManagementException
   {
     log.info("{}: started requestBlackList. All: {} | Delta: {}", cvcRefId, all, delta);
+    long blackListStart;
     BlackListResult blResult;
     try
     {
@@ -229,6 +235,7 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
       log.debug("{}: obtained lock on SSL context for downloading black list", cvcRefId);
       RestrictedIdServiceWrapper wrapper = createWrapper();
 
+      blackListStart = System.currentTimeMillis();
       byte[] deltaID = null;
       if (delta)
       {
@@ -242,11 +249,15 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     }
     catch (GovManagementException e)
     {
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_NOT_RECEIVED);
       throw e;
     }
     catch (Exception e)
     {
       log.error("{}: cannot download black list", cvcRefId, e);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_NOT_RECEIVED);
       throw new GovManagementException(GlobalManagementCodes.EXTERNAL_SERVICE_NOT_REACHABLE,
                                        pkiConfig.getRestrictedIdService().getUrl(), e.getLocalizedMessage());
     }
@@ -258,23 +269,35 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     if (blResult == null || (blResult.getUri() == null && blResult.getDeltaAdded() == null))
     {
       log.info("{}: Did not receive a blacklist from BerCa", cvcRefId);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_NOT_RECEIVED);
       return new HashSet<>();
     }
     if (RestrictedIdServiceWrapper.NO_NEW_DATA.equals(blResult))
     {
       log.info("{}: No newer delta blacklist from BerCa available", cvcRefId);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_RENEWED);
       facade.updateBlackListStoreDate(cvcRefId, null, null);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_PROCESSING_DURATION,
+                                  System.currentTimeMillis() - blackListStart);
       return new HashSet<>();
     }
 
     // No URI means we received a delta list
     if (blResult.getUri() != null)
     {
-      return processFullBlackList(all, blResult);
+      Set<ByteBuffer> result = processFullBlackList(all, blResult);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_PROCESSING_DURATION,
+                                  System.currentTimeMillis() - blackListStart);
+      return result;
     }
     else
     {
-      return processDeltaBlackList(all, blResult);
+      Set<ByteBuffer> result = processDeltaBlackList(all, blResult);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_PROCESSING_DURATION,
+                                  System.currentTimeMillis() - blackListStart);
+      return result;
     }
   }
 
@@ -284,6 +307,8 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     if (!checkBlacklistsSignature(blResult.getDeltaAdded(), pkiConfig.getBlackListTrustAnchor())
         || !checkBlacklistsSignature(blResult.getDeltaRemoved(), pkiConfig.getBlackListTrustAnchor()))
     {
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_SIGNATURE_CHECK_FAILED);
       throw new GovManagementException(GlobalManagementCodes.EC_UNEXPECTED_ERROR,
                                        "signature check of black list failed");
     }
@@ -295,6 +320,8 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
       entityIDs.addAll(importBlacklistCollection(new BlackListContent(blResult.getDeltaAdded()),
                                                  BlackList.TYPE_ADDED));
       log.info("Successfully finished requestBlackList for {} terminals", entityIDs.size());
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_RENEWED);
       return entityIDs;
     }
     else
@@ -318,10 +345,14 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
         {
           result.add(ByteBuffer.wrap(sectorID));
         }
+        SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                    SNMPConstants.LIST_RENEWED);
         return result;
       }
       catch (IOException e)
       {
+        SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                    SNMPConstants.LIST_PROCESSING_ERROR);
         throw new IllegalArgumentException(UNABLE_TO_PARSE_GIVEN_CVC, e);
       }
     }
@@ -337,6 +368,8 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     {
       Set<ByteBuffer> updatedSectorIDs = importBlacklistCollection(blackList, BlackList.TYPE_COMPLETE);
       log.info("Successfully finished requestBlackList for {} terminals", updatedSectorIDs.size());
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_RENEWED);
       return updatedSectorIDs;
     }
     TerminalPermission tp = facade.getTerminalPermission(cvcRefId);
@@ -354,10 +387,14 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
       {
         result.add(ByteBuffer.wrap(sectorID));
       }
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_RENEWED);
       return result;
     }
     catch (IOException e)
     {
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_PROCESSING_ERROR);
       throw new IllegalArgumentException(UNABLE_TO_PARSE_GIVEN_CVC, e);
     }
   }
@@ -373,12 +410,16 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     }
     catch (SocketException e)
     {
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_NOT_RECEIVED);
       throw new GovManagementException(GlobalManagementCodes.EXTERNAL_SERVICE_NOT_REACHABLE,
                                        blResult.getUri(), e.getMessage());
     }
     catch (Exception e)
     {
       log.error("{}: cannot download black list", cvcRefId, e);
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_NOT_RECEIVED);
       throw new GovManagementException(GlobalManagementCodes.INTERNAL_ERROR);
     }
     finally
@@ -388,6 +429,8 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
     }
     if (!checkBlacklistsSignature(blackList.getContent(), pkiConfig.getBlackListTrustAnchor()))
     {
+      SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                  SNMPConstants.LIST_SIGNATURE_CHECK_FAILED);
       throw new GovManagementException(GlobalManagementCodes.EC_UNEXPECTED_ERROR,
                                        "signature check of black list failed");
     }
@@ -571,6 +614,8 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
       }
     }
     log.error("{}:The blacklist did not contain a part suitable for this cvcRefId", cvcRefId);
+    SNMPTrapSender.sendSNMPTrap(SNMPConstants.TrapOID.BLACKLIST_TRAP_LAST_RENEWAL_STATUS,
+                                SNMPConstants.LIST_PROCESSING_ERROR);
     return null;
   }
 
@@ -611,7 +656,15 @@ public class RestrictedIdHandler extends BerCaRequestHandlerBase
    */
   private boolean checkBlacklistsSignature(byte[] blacklist, X509Certificate trustAnchor)
   {
-    return new CmsSignatureChecker(trustAnchor).checkEnvelopedSignature(blacklist, cvcRefId);
+    try
+    {
+      new CmsSignatureChecker(trustAnchor).checkEnvelopedSignature(blacklist);
+      return true;
+    }
+    catch (SignatureException | CMSException e)
+    {
+      log.debug("Signature check on blacklist not successful", e);
+      return false;
+    }
   }
-
 }

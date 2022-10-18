@@ -86,7 +86,7 @@
         <!-- 2.0.0 exists but is for OpenSAML 4 only -->
         <version.opensaml-security-ext>1.0.8</version.opensaml-security-ext>
         <version.opensaml>3.4.6</version.opensaml>
-        <version.xmlsec>2.3.1</version.xmlsec>
+        <version.xmlsec>2.3.2</version.xmlsec>
 
         <version.cxf>3.4.7</version.cxf>
         <version.springboot>2.6.9</version.springboot>
@@ -366,7 +366,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

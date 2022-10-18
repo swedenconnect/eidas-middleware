@@ -79,7 +79,7 @@
 
         <!-- crypto -->
         <!-- 1.68 available but is incompatible with opensaml-security-ext-1.0.7 -->
-        <version.bouncycastle>1.66</version.bouncycastle>
+        <version.bouncycastle>1.70</version.bouncycastle>
         <version.eidas-opensaml3>1.4.5</version.eidas-opensaml3>
         <!-- 8.x.x available but not for Java 8 -->
         <version.javasupport>7.5.2</version.javasupport>
@@ -366,7 +366,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

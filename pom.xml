@@ -88,7 +88,7 @@
         <version.opensaml>3.4.6</version.opensaml>
         <version.xmlsec>2.3.1</version.xmlsec>
 
-        <version.cxf>3.4.7</version.cxf>
+        <version.cxf>3.5.3</version.cxf>
         <version.springboot>2.6.9</version.springboot>
         <version.thymeleaf>3.0.15.RELEASE</version.thymeleaf>
         <version.thymeleaf-layout-dialect>2.5.3</version.thymeleaf-layout-dialect>
@@ -366,7 +366,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

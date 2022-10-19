@@ -135,7 +135,7 @@
         <!-- version for bootstrap -->
         <!-- ATTENTION you need to change the templates on updating these versions -->
         <version.bootstrap>5.1.3</version.bootstrap>
-        <version.jquery>3.6.0</version.jquery>
+        <version.jquery>3.6.1</version.jquery>
     </properties>
 
     <build>
@@ -366,7 +366,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

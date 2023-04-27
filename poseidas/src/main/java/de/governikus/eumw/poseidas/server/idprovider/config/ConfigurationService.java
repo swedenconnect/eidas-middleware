@@ -35,6 +35,7 @@ import de.governikus.eumw.eidascommon.ErrorCodeException;
 import de.governikus.eumw.eidasmiddleware.eid.RequestingServiceProvider;
 import de.governikus.eumw.eidasstarterkit.EidasMetadataNode;
 import de.governikus.eumw.eidasstarterkit.EidasSaml;
+import de.governikus.eumw.pkcs11.RestrictedHSMProvider;
 import de.governikus.eumw.utils.key.KeyReader;
 import de.governikus.eumw.utils.key.KeyStoreSupporter;
 import de.governikus.eumw.utils.xml.XmlException;
@@ -57,6 +58,8 @@ public class ConfigurationService
   private static final long CONFIGURATION_ID = 1L;
 
   private final ConfigurationRepository configurationRepository;
+
+  private final RestrictedHSMProvider restrictedHSMProvider;
 
   /**
    * Get the current configuration from the database
@@ -176,7 +179,29 @@ public class ConfigurationService
    */
   public KeyPair getKeyPair(String keyPairName)
   {
+
     var configuration = getConfiguration();
+
+    /*
+     * Sweden Connect addition for extracting an HSM signing key
+     */
+    String signatureKeyPairName = configuration.get()
+      .getEidasConfiguration()
+      .getSignatureKeyPairName();
+
+    if (signatureKeyPairName.equals(keyPairName)){
+      // Get a configured HSM signing key
+      KeyPair hsmSigningKeyPair = restrictedHSMProvider.getHSMSigningKeyPair();
+      if (hsmSigningKeyPair != null) {
+        // return HSM signing key
+        log.debug("Using restricted HSM provider signing key");
+        return hsmSigningKeyPair;
+      }
+    }
+    /*
+     * End Sweden Connect extension
+     */
+
     if (configuration.isEmpty())
     {
       throw new ConfigurationException("No configuration present");

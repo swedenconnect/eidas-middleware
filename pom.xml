@@ -136,7 +136,7 @@
         <version.dependency-check-maven>7.1.1</version.dependency-check-maven>
 
         <!-- version for Webjars -->
-        <version.webjars.locator>0.45</version.webjars.locator>
+        <version.webjars.locator>0.47</version.webjars.locator>
         <version.webjars.fontawesome>6.1.0</version.webjars.fontawesome>
 
         <!-- version for bootstrap -->
@@ -395,7 +395,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

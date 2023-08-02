@@ -1,5 +1,6 @@
 FROM openjdk:11-jre
 #FROM docker.sunet.se/openjdk-jre-luna:luna7.4-jre11
+#FROM docker.sunet.se/openjdk-jre-luna:ubuntu-luna7.4-jre11
 
 # Define the spring boot configuration directory
 ENV CONFIG_DIR=/opt/eidas-middleware/configuration

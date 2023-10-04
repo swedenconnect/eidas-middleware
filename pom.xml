@@ -82,7 +82,7 @@
         <version.bouncycastle>1.66</version.bouncycastle>
         <version.eidas-opensaml4>2.1.1</version.eidas-opensaml4>
         <version.javasupport>8.0.0</version.javasupport>
-        <version.opensaml-security-ext>2.1.0</version.opensaml-security-ext>
+        <version.opensaml-security-ext>4.0.0</version.opensaml-security-ext>
         <version.opensaml>4.0.1</version.opensaml>
         <!-- OpenSAML versions <4.1.1 ship with velocity 2.2 which has a CVE -->
         <version.velocity>2.3</version.velocity>
@@ -395,7 +395,7 @@
                                     <version>[3.3,)</version>
                                 </requireMavenVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

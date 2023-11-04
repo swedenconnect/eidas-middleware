@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk-alpine:11
+FROM azul/zulu-openjdk-alpine:11.0.21-11.68.17-jre-headless
 
 MAINTAINER Benny Prange <benny.prange@governikus.de>
 

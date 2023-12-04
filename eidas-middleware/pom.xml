@@ -14,7 +14,7 @@
     <parent>
         <groupId>de.governikus.eumw</groupId>
         <artifactId>eumw</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.2</version>
     </parent>
     <artifactId>eidas-middleware</artifactId>
 
@@ -67,6 +67,10 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>ausweisapp2__identglue</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -76,6 +80,11 @@
         <dependency>
             <groupId>se.swedenconnect.opensaml</groupId>
             <artifactId>opensaml-security-ext</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jmrtd</groupId>
+            <artifactId>jmrtd</artifactId>
         </dependency>
 
         <!-- logging -->
@@ -166,6 +175,9 @@
                         <image>
                             <name>governikus/eidas-middleware-application:${project.version}</name>
                             <build>
+                                <tags>
+                                    <tag>latest</tag>
+                                </tags>
                                 <contextDir>.</contextDir>
                                 <assembly>
                                     <descriptorRef>artifact</descriptorRef>
@@ -175,6 +187,9 @@
                         <image>
                             <name>governikus/eidas-middleware-application-hsm:${project.version}</name>
                             <build>
+                                <tags>
+                                    <tag>latest</tag>
+                                </tags>
                                 <contextDir>.</contextDir>
                                 <dockerFile>Dockerfile_HSM</dockerFile>
                             </build>

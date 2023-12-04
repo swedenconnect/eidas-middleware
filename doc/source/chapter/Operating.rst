@@ -60,14 +60,14 @@ To run the eIDAS Middleware, execute the following command.
 It will mount the named volumes containing the database and configuration in the container
 and the application will be available on port 8443. ::
 
-    docker run --rm -it -v eidas-configuration:/opt/eidas-middleware/configuration -v eidas-database:/opt/eidas-middleware/database -p 8443:8443 --name eidas-middleware-application governikus/eidas-middleware-application:3.0.0
+    docker run --rm -it -v eidas-configuration:/opt/eidas-middleware/configuration -v eidas-database:/opt/eidas-middleware/database -p 8443:8443 --name eidas-middleware-application governikus/eidas-middleware-application:3.1.2
 
 To stop and remove the container, just hit ``CTRL+C``.
 
 To keep the container running longer without being attached to the STDOUT and STDERR, change the command to
 the following::
 
-    docker run -d -v eidas-configuration:/opt/eidas-middleware/configuration -v eidas-database:/opt/eidas-middleware/database -p 8443:8443 --name eidas-middleware-application governikus/eidas-middleware-application:3.0.0
+    docker run -d -v eidas-configuration:/opt/eidas-middleware/configuration -v eidas-database:/opt/eidas-middleware/database -p 8443:8443 --name eidas-middleware-application governikus/eidas-middleware-application:3.1.2
 
 For more information on starting and stopping containers and viewing the logs,
 see the `Docker Docs <https://docs.docker.com/engine/reference/run/>`_.
@@ -173,7 +173,7 @@ Scalability
 The performance of the eIDAS Middleware improves by adding more memory (RAM) and using a faster CPU.
 In case the memory configuration has changed, the server needs to be restarted.
 To start the JVM with more memory, add ``-Xmx`` with the new maximum memory size to the start command,
-e.g. ``java -Xmx8g -jar eidas-middleware-3.0.0.jar`` for 8 GB.
+e.g. ``java -Xmx8g -jar eidas-middleware-3.1.2.jar`` for 8 GB.
 
 
 Request Signer Certificate
@@ -203,6 +203,18 @@ Please check the logs accordingly.
 
 A service to automatically send the :term:`Request Signer Certificate` to the :term:`Authorization CA`
 will be implemented in the future.
+
+Automatic renewal of the authorization certificate on invalidation with the request signer certificate
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+In case a CVC has expired,
+a new CVC can be requested automatically with a request signer certificate.
+As long as the expiration date of the CVC is not more than two days ago,
+an attempt is made every six hours to request a new CVC with the request signer certificate.
+The message *"The CVC has expired. The system tries to renew the CVC in the background. Alternatively,
+a manual initial request can be performed"* will be visible in that timespan:
+
+.. image:: ../images/message_automatic_renew_rsc.jpg
 
 
 Monitoring
@@ -265,7 +277,7 @@ Optional property for ``TRAP`` is ``poseidas.snmp.managementport`` (port 162 is 
 set).
 
 All existing SNMP GET values are explained in detail in the MIB located at
-``https://github.com/Governikus/eidas-middleware/blob/3.0.0/poseidas/snmp/EIDASMW-SNMP-MIB.mib``.
+``https://github.com/Governikus/eidas-middleware/blob/3.1.2/poseidas/snmp/EIDASMW-SNMP-MIB.mib``.
 
 Global GET
 ''''''''''
@@ -333,41 +345,6 @@ Trap prefix = |TRAP_PREFIX|
     |CRL_TRAP_LAST_RENEWAL_STATUS|; The status of the last renewal of the Certificate Revocation List; 0 = success, 1 = failed (Integer32)
     |RSC_TRAP_CHANGE_TO_CURRENT_RSC|; A pending Request Signer Certificate is now current; 0 = success, 1 = failed because there is no pending rsc, 2 = failed because there is no RefID (Integer32)
     |RSC_TRAP_NEW_PENDING_CERTIFICATE|; A new pending Request Signer Certificate has been generated; Certificate information (OCTET STRING)
-
-
-.. _database_migration:
-
-Migration Instructions
-----------------------
-In version 1.0.3 the database schema was changed to improve the handling of productive Black Lists.
-This means that you must perform a database migration when you want to upgrade a previous eIDAS Middleware Application
-to version 1.0.3 and later.
-
-The database migration tool is included in every release and can be found on github.
-
-The database migration tool needs to be configured before performing the migration.
-Because this tool uses Spring Boot as well, the configuration is done in the ``application.properties`` file that must
-be present either in the working directory or in a subdirectory of the working directory called ``config``.
-The configuration file must contain the following values. The first three values can be copied from
-the ``application.properties`` file that is used for the eIDAS Middleware Application. ::
-
-    spring.datasource.url=
-    spring.datasource.username=
-    spring.datasource.password=
-    spring.datasource.driver-class-name=org.h2.Driver
-    spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-    spring.jpa.hibernate.ddl-auto=update
-    spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
-Before running the migration tool, please create a backup of your database.
-Stop the eIDAS Middleware Application and copy the database file to your backup location,
-e.g. ``cp /opt/eidas-middleware/database/eidasmw.mv.db /path/to/your/backup-location/eidasmw.mv.db``.
-
-To perform the migration, copy the database migration JAR file to the directory where your
-configuration file is available and execute the command ``java -jar database-migration-3.0.0.jar``.
-If there are errors in the log output, please send the complete log output and some information on your environment to
-eidas-middleware@governikus.com.
 
 
 Test mode

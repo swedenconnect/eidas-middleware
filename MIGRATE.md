@@ -1,4 +1,4 @@
-# Migrate to 3.1.2 with Restricted HSM provider from version 2.x
+# Migrate from version 2.x to 3.1.2 with Restricted HSM provider
 
 
 This is a guide on how to migrate DE middleware with Sweden Connect HSM support from version 2.x to version 3.1.2
@@ -13,7 +13,7 @@ but also stores and deletes ephemeral keys with shorter lifespan that are contin
 
 This provides challenges mainly because:
 
-1) It requires that the middleware application has extensive rights to generate and erase arbitrary keys in the HSM. In theory this gives the software complete power over the HSM in a way that partly defeats the protective goals of an HSM, for example if a pre-loaded key is replaced by the application.
+1) It requires that the middleware application has extensive rights to generate and erase arbitrary keys in the HSM. In theory, this gives the software complete power over the HSM in a way that partly defeats the protective goals of an HSM, for example if a pre-loaded key is replaced by the application.
 2) It makes it very challenging to maintain a test environment using SoftHSM where an image with the middleware is spun up with a preconfigured HSM. Doing so would alter the state of the temporary key storage and bring the middleware out of sync wihth the German eID system, requiring CVC reset each time through Governikus help desk.
 
 For this reason, the Sweden Connect extension to the Middleware application provides a restricted HSM provider that restricts

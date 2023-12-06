@@ -1,16 +1,15 @@
-# Migrate to 3.0.1 with Restricted HSM provider from version 2.x
+# Migrate to 3.1.2 with Restricted HSM provider from version 2.x
 
 
-This is a guide on how to migrate DE middleware with Sweden Connect HSM support from version 2.x to version 3.0.1
+This is a guide on how to migrate DE middleware with Sweden Connect HSM support from version 2.x to version 3.1.2
 
 ## Background
 
-The German middleware application provides native support HSM key storage using PKCS#11 API. 
-The native HSM support works quite well, but provides deployment challenges that prevents its use in the Sweden Connect
-service infrastructure.
-The primary cause is that the HSM is used, not only for pre-generated
-and pre-stored keys that are added as part of a secure setup of the service, but also stores and deletes ephemeral keys with 
-shorter lifespan that are continuously generated and deleted by the middleware application.
+The German middleware application provides native support for HSM key storage using PKCS#11 API. 
+The native HSM support works quite well, 
+but provides deployment challenges that prevent its use in the Sweden Connect service infrastructure.
+The primary cause is that the HSM is used not only for pre-generated and pre-stored keys that are added as part of a secure setup of the service, 
+but also stores and deletes ephemeral keys with shorter lifespan that are continuously generated and deleted by the middleware application.
 
 This provides challenges mainly because:
 
@@ -31,7 +30,7 @@ The dummy key provided in this setup is necessary for the middleware application
 **NOTE**: The use of a dummy key for setup before attaching an HSM key to be used in its place allows minimum changes to the code base and
 allows HSM configuration to be completed in a completely separate step once the application has successfully configured.
 
-Once the base configuration works and pass all tests, additional configuration properties can be applied to swap in the use of a pre-configured
+Once the base configuration works and passes all tests, additional configuration properties can be applied to swap in the use of a pre-configured
 HSM stored key for SAML signing.
 
 ## Migration
@@ -66,9 +65,9 @@ When migrating from version 2.x, there are two options:
 1) Rebuild the complete configuration from scratch using the configuration API on the location above. For instruction on how to provide configuration data using the admin GUI, see [eIDASMiddleware.pdf](https://github.com/Governikus/eidas-middleware/releases/download/3.0.1/eIDASMiddleware.pdf)
 2) Extract configuration from a version 2.x setup using the configuration migration tool [configuration migration tool](https://github.com/Governikus/eidas-middleware/tree/master/configuration-migration)
 
-Once these steps are completed, the eIDAS middleware application should be operational using software based keys. If the old database
-file is being used, the CVC should be in sync and the service should work as intended, except for the fact that SAML signing is made by the
-dummy key stored on disk.
+Once these steps are completed, the eIDAS middleware application should be operational using software-based keys. 
+If the old database file is being used, the CVC should be in sync and the service should work as intended, 
+except for the fact that SAML signing is made by the dummy key stored on disk.
 
 
 ### Add configuration for using a Restricted HSM provider for SAML signing
@@ -81,7 +80,8 @@ A pre-stored SAML signing key is attached to the eIDAS middleware by adding the 
 | sc-hsm.p11-pin         | HSM slot pin                                                                                                                                                   |
 | sc-hsm.p11-alias       | HSM key alias                                                                                                                                                  |
 
-As the middleware application is a Spring Boot application these property values can be added using several strategies. Two examples are shown below:
+As the middleware application is a Spring Boot application, these property values can be added using several strategies. 
+Two examples are shown below:
 
 Example: Properties values
 

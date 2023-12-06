@@ -4,6 +4,9 @@ out/
 *Jenkinsfile*
 .hg/
 
+# Mac
+.DS_Store
+
 # IntelliJ project files
 *.iml
 *.iws

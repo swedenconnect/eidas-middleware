@@ -145,7 +145,7 @@
 
         <!-- version for Webjars -->
         <version.webjars.locator>0.50</version.webjars.locator>
-        <version.webjars.fontawesome>6.4.2</version.webjars.fontawesome>
+        <version.webjars.fontawesome>6.5.1</version.webjars.fontawesome>
         <version.webjars.identglue>1.0.7</version.webjars.identglue>
         <version.webjars.bootstrap>5.3.2</version.webjars.bootstrap>
         <version.webjars.jquery>3.7.1</version.webjars.jquery>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

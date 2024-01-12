@@ -179,7 +179,7 @@
 
 
         <!-- this must be compatible to jakarta-xml-ws.version from spring-boot-dependencies -->
-        <version.jaxws-rt>4.0.1</version.jaxws-rt>
+        <version.jaxws-rt>4.0.2</version.jaxws-rt>
         <version.jvnet.jaxb>3.0.1</version.jvnet.jaxb>
         <version.commons.codec>1.16.0</version.commons.codec>
     </properties>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

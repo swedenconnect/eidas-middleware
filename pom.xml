@@ -116,7 +116,7 @@
         <version.jackson>2.16.0</version.jackson>
         <version.jakarta.activation>2.0.1</version.jakarta.activation>
         <version.jakarta.jws-api>3.0.0</version.jakarta.jws-api>
-        <version.jaxb2-basics>1.11.1</version.jaxb2-basics>
+        <version.jaxb2-basics>1.11.1-PUBLISHED-BY-MISTAKE</version.jaxb2-basics>
         <version.jaxws.maven.plugin>4.0.2</version.jaxws.maven.plugin>
         <version.jaxb-runtime>4.0.4</version.jaxb-runtime>
         <version.jmrtd>0.7.40</version.jmrtd>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

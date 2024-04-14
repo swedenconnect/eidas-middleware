@@ -87,7 +87,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- crypto -->
-        <version.bouncycastle>1.77</version.bouncycastle>
+        <version.bouncycastle>1.78</version.bouncycastle>
         <version.javasupport>8.4.0</version.javasupport>
         <version.opensaml>5.0.0</version.opensaml>
         <version.opensaml-eidas>3.0.0</version.opensaml-eidas>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

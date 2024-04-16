@@ -119,7 +119,7 @@
         <version.jaxb2-basics>1.11.1</version.jaxb2-basics>
         <version.jaxws.maven.plugin>4.0.2</version.jaxws.maven.plugin>
         <version.jaxb-runtime>4.0.4</version.jaxb-runtime>
-        <version.jmrtd>0.7.40</version.jmrtd>
+        <version.jmrtd>0.7.42</version.jmrtd>
         <version.json-schema-validator>2.2.14</version.json-schema-validator>
         <version.jsr305>3.0.2</version.jsr305>
         <version.groovy>4.0.15</version.groovy>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

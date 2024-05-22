@@ -91,7 +91,7 @@
         <version.javasupport>8.4.0</version.javasupport>
         <version.opensaml>5.0.0</version.opensaml>
         <version.opensaml-eidas>3.0.0</version.opensaml-eidas>
-        <version.opensaml-security-ext>4.0.0</version.opensaml-security-ext>
+        <version.opensaml-security-ext>4.1.0</version.opensaml-security-ext>
         <version.xmlsec>4.0.0</version.xmlsec>
 
         <version.cxf>4.0.3</version.cxf>
@@ -416,7 +416,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

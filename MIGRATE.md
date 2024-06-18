@@ -1,4 +1,4 @@
-# Migrate from version 2.x to 3.x with Restricted HSM provider
+# Migrate from version 2.x to 3.3.x with Restricted HSM provider
 
 
 This is a guide on how to migrate DE middleware with Sweden Connect HSM support from version 2.x to version 3.x
@@ -35,11 +35,13 @@ HSM stored key for SAML signing.
 
 ## Migration
 
-The migration is done in 2 steps:
+The migration is done in 3 steps:
 
-1) Migrate the 2.x configuration to a functioning 3.0.1 configuration
+1) Migrate the 2.x configuration to a functioning 3.0.1-3.2.x configuration
 2) Add configuration for the restricted HSM provider for SAML signing
+3) Migrate the database from H2 to HSQL (See eIDASMiddlewareMigrationGuide.pdf)
 
+Note: Also consult the documentation specified under point 3 for direct migration to HSQL database from previous versions.
 
 ### Migrate configuration from 2.x to 3.x
 

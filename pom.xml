@@ -87,7 +87,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.78.1</version.bouncycastle>
@@ -188,7 +188,7 @@
         <!-- this must be compatible to jakarta-xml-ws.version from spring-boot-dependencies -->
         <version.jaxws-rt>4.0.2</version.jaxws-rt>
         <version.jvnet.jaxb>3.0.1</version.jvnet.jaxb>
-        <version.commons.codec>1.16.0</version.commons.codec>
+        <version.commons.codec>1.17.0</version.commons.codec>
     </properties>
 
     <build>
@@ -423,7 +423,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

@@ -87,7 +87,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.78.1</version.bouncycastle>
@@ -116,7 +116,7 @@
         <version.guava>33.1.0-jre</version.guava>
         <!-- only used for the migration tool -->
         <version.h2>1.4.200</version.h2>
-        <version.hsqldb>2.7.2</version.hsqldb>
+        <version.hsqldb>2.7.3</version.hsqldb>
         <!-- httpclient is moved to httpclient5 and needs a code migration -->
         <version.httpclient>4.5.14</version.httpclient>
         <version.istack-commons-runtime>4.2.0</version.istack-commons-runtime>
@@ -423,7 +423,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

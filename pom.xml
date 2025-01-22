@@ -87,7 +87,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.78.1</version.bouncycastle>
@@ -98,7 +98,7 @@
         <!-- 4.0.2 introduces a bug in the EncryptionMethod-Element, so this version should not be used. -->
         <version.xmlsec>4.0.1</version.xmlsec>
 
-        <version.cxf>4.0.4</version.cxf>
+        <version.cxf>4.0.6</version.cxf>
         <!-- se.swedenconnect.opensaml:opensaml-security-ext:4.0.0 uses version 9.0.0, after updating it, check if his is necessary-->
         <version.shib-support>9.1.2</version.shib-support>
 
@@ -423,7 +423,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

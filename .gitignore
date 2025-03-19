@@ -1,8 +1,12 @@
 target/
 packer/
+out/
 *Jenkinsfile*
 .hg/
 /helm/
+
+# Mac
+.DS_Store
 
 # IntelliJ project files
 *.iml

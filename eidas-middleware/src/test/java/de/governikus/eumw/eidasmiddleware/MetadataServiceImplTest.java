@@ -92,7 +92,7 @@ class MetadataServiceImplTest
     configuration.setXmlConfigBlob(createConfiguration());
     Mockito.when(configurationRepository.findById(1L)).thenReturn(java.util.Optional.of(configuration));
     metadataService = new MetadataServiceImpl(buildProperties, hsmServiceHolder,
-                                              new ConfigurationService(configurationRepository));
+                                              new ConfigurationService(configurationRepository, null, null, null));
   }
 
 

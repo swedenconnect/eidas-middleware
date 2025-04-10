@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.xml.io.UnmarshallingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -54,7 +55,6 @@ import net.shibboleth.utilities.java.support.xml.XMLParserException;
  * This class is a service providing methods to load and save the {@link EidasMiddlewareConfig}
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ConfigurationService
 {
@@ -64,6 +64,15 @@ public class ConfigurationService
   private final ConfigurationRepository configurationRepository;
 
   private final RestrictedHSMProvider restrictedHSMProvider;
+
+  public ConfigurationService(final ConfigurationRepository configurationRepository,
+      @Value("${sc-hsm.p11-config-file:#{null}}") String p11ConfigFile,
+      @Value("${sc-hsm.p11-pin:#{null}}") String p11Pin,
+      @Value("${sc-hsm.p11-alias:#{null}}") String p11Alias
+  ) throws Exception {
+    this.configurationRepository = configurationRepository;
+    this.restrictedHSMProvider = new RestrictedHSMProvider(p11ConfigFile, p11Pin, p11Alias);
+  }
 
   /**
    * Get the current configuration from the database

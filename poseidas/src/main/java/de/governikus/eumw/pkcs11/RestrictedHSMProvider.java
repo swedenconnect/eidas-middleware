@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
  * to providing a SAML signing key.
  *
  */
-@Component
 @Slf4j
 public class RestrictedHSMProvider {
 

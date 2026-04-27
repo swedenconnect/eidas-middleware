@@ -87,7 +87,7 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.80</version.bouncycastle>
@@ -154,7 +154,7 @@
         <version.webjars.locator>0.52</version.webjars.locator>
         <version.webjars.fontawesome>6.7.2</version.webjars.fontawesome>
         <version.webjars.identglue>1.0.14</version.webjars.identglue>
-        <version.webjars.bootstrap>5.3.3</version.webjars.bootstrap>
+        <version.webjars.bootstrap>5.3.8</version.webjars.bootstrap>
         <version.webjars.jquery>3.7.1</version.webjars.jquery>
 
         <!-- versions for plugins -->
@@ -423,7 +423,7 @@
                                     <version>17</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

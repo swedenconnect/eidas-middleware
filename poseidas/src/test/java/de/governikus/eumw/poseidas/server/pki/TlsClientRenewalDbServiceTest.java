@@ -133,7 +133,7 @@ class TlsClientRenewalDbServiceTest
     certificates.add(csrCertificateAsByteArray);
 
     TimerHistoryService timerHistoryServiceMock = Mockito.mock(TimerHistoryService.class);
-    ConfigurationService configurationService = new ConfigurationService(configurationRepository);
+    ConfigurationService configurationService = new ConfigurationService(configurationRepository, null, null, null);
 
     tlsClientRenewalDbService = new TlsClientRenewalDbService(configurationService, requestSignerCertificateService,
                                                               pendingCsrRepository, termAuthServiceBean,

@@ -60,9 +60,9 @@ class ConfigurationServiceTest
   private ConfigurationRepository configurationRepository;
 
   @BeforeEach
-  void setUp()
+  void setUp() throws Exception
   {
-    configurationService = new ConfigurationService(configurationRepository);
+    configurationService = new ConfigurationService(configurationRepository, null, null, null);
   }
 
   @AfterEach

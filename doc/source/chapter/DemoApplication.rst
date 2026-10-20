@@ -52,8 +52,8 @@ Using the eIDAS Demo Application
 To use the eIDAS Demo Application, start by running the eIDAS Demo Application.
 
 #. Change to the correct directory where the aforementioned configuration is present.
-#. If not present, copy the ``eidas-demo-4.0.0.jar`` file in this directory.
-#. Start the application by executing ``java -jar eidas-demo-4.0.0.jar``.
+#. If not present, copy the ``eidas-demo-4.0.2.jar`` file in this directory.
+#. Start the application by executing ``java -jar eidas-demo-4.0.2.jar``.
 
 Now you must configure your eIDAS Middleware to communicate with the eIDAS Demo Application.
 
@@ -91,14 +91,9 @@ Also bear in mind that you must use the path of the container file system in the
 
 To run the Middleware, execute the following command after you have prepared the configuration, certificate and key stores::
 
-    docker run --rm -it -v /path/to/your/config-directory:/opt/eidas-middleware/config -p 8080:8080 governikus/eidas-demo-application:4.0.0
+    docker run --rm -it -v /path/to/your/config-directory:/opt/eidas-middleware/config -p 8080:8080 governikus/eidas-demo-application:4.0.2
 
 Now you can follow the steps above to configure and test the eIDAS Middleware.
 
 To stop the eIDAS Demo Application, execute ``CTRL+C``.
 
-There is also a docker compose file available at `GitHub <https://github.com/Governikus/eidas-middleware/blob/master/eidas-demo/docker-compose/docker-compose.yaml>`_.
-You can copy this file on your local machine and create a directory called configuration in your working directory.
-Then copy the configuration file and the certificate and key stores in the configuration directory.
-Afterwards you can run the container by executing ``docker-compose up``.
-To stop and remove the container, first execute ``CTRL+C`` followed by ``docker-compose down``.

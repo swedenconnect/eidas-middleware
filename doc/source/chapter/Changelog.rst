@@ -293,3 +293,32 @@ Changelog
     - eIDAS Middleware: Added a "Delete current RSC" button to the Admin UI. The button is located in the RSC Actions card under the Service Provider's details and is visible only when a current RSC is present.
     - eIDAS Middleware: Added new column "NextRscSequenceNumber" to "TerminalPermission" table. Please make sure to create a database backup before applying this update.
     - eIDAS Middleware: Added new timer to optionally delete expired keys in the HSM
+
+* 4.0.1
+
+    - eIDAS Middleware: Restrict crypto algorithms to those allowed in TR-03116-4 (2025) and TR-02102-2 (2025)
+    - eIDAS Middleware: Fixed error when parsing a Defect List with id-CertReplaced element.
+
+* 4.0.2
+
+    - All components: Update Spring Boot dependency to close CVE-2026-22732.
+    - eIDAS Middleware: Note: IdentGlue requires the new browser permission “Local Network Access” to function
+      correctly, as it is necessary for the status detection of the AusweisApp.
+    - eIDAS Middleware: Set XML parser properties jdk.xml.elementAttributeLimit and jdk.xml.maxElementDepth to 20 to
+      deny SAML or PAOS requests with too large contents.
+
+* 4.1.0
+
+    - eIDAS Middleware: Updated to Spring Boot 4.
+    - eIDAS Middleware: Updated JDK to version 25.
+    - eIDAS Middleware: Refactoring of ASN.1 handling, using Bouncy Castle.
+    - eIDAS Middleware: Improved the automatic TLS certificate entanglement.
+    - eIDAS Middleware: Added URL to footer to BSI imprint.
+    - eIDAS Middleware: Added optional properties ``eidas.middleware.authority.address`` and ``eidas.middleware.privacy.policy.url`` to application.properties to configure footer information.
+    - eIDAS Middleware: Added database schema management. The property ``spring.jpa.hibernate.ddl-auto`` should not be used anymore!
+    - eIDAS Middleware: Added optional property ``server.maxRequestSize`` to limit the request size in KB for POST
+      requests on specific endpoints
+    - eIDAS Middleware: In the DVCA configuration, the DVCA server certificate is optional. If no certificate is configured, the Java Trust Store is used.
+    - eIDAS Middleware: Information on cryptographic algorithms from the connectors metadata is now given priority over
+      the default values provided as long as it meets the requirements.
+    - eIDAS Middleware: The “Nationality”, "CurrentAddress" and "PlaceOfBirth" attributes are no longer present in the response if these attributes have an empty string as their value.

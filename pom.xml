@@ -87,7 +87,7 @@
         <maven.compiler.target>25</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.84</version.bouncycastle>
@@ -95,7 +95,7 @@
         <version.opensaml>5.2.2</version.opensaml>
         <version.opensaml-eidas>3.3.2</version.opensaml-eidas>
         <version.opensaml-governikus-extension>1.2.0</version.opensaml-governikus-extension>
-        <version.opensaml-security-ext>4.2.1</version.opensaml-security-ext>
+        <version.opensaml-security-ext>4.2.2</version.opensaml-security-ext>
         <!-- 4.0.2 introduces a bug in the EncryptionMethod-Element, so this version should not be used. -->
         <version.xmlsec>4.0.4</version.xmlsec>
 
@@ -453,7 +453,7 @@
                                     <version>25</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

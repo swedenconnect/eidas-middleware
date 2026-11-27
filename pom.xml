@@ -87,7 +87,7 @@
         <maven.compiler.target>25</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.84</version.bouncycastle>
@@ -109,7 +109,7 @@
         <version.commons.fileupload>1.6.0</version.commons.fileupload>
         <version.commons.io>2.22.0</version.commons.io>
         <version.commons.text>1.15.0</version.commons.text>
-        <version.commons.lang3>3.20.0</version.commons.lang3>
+        <version.commons.lang3>3.21.0</version.commons.lang3>
         <version.guava>33.6.0-jre</version.guava>
         <!-- only used for the migration tool -->
         <version.h2>1.4.200</version.h2>
@@ -453,7 +453,7 @@
                                     <version>25</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to

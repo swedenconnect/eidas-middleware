@@ -87,7 +87,7 @@
         <maven.compiler.target>25</maven.compiler.target>
 
         <!-- empty property used for the surefire plugin, is overwritten by the jacoco plugin in the coverage profile -->
-        <argLine />
+        <argLine/>
 
         <!-- crypto -->
         <version.bouncycastle>1.84</version.bouncycastle>
@@ -164,7 +164,7 @@
         <version.build-helper-maven-plugin>3.6.1</version.build-helper-maven-plugin>
         <version.docker-maven-plugin>0.48.1</version.docker-maven-plugin>
         <version.extra-enforcer-rules>1.12.0</version.extra-enforcer-rules>
-        <version.hibernate-jpamodelgen>7.4.1.Final</version.hibernate-jpamodelgen>
+        <version.hibernate-jpamodelgen>7.4.14.Final</version.hibernate-jpamodelgen>
         <version.jacoco-maven-plugin>0.8.15</version.jacoco-maven-plugin>
         <version.jaxb2-maven-plugin>0.15.3</version.jaxb2-maven-plugin>
         <version.jaxb2-value-constructor>3.0</version.jaxb2-value-constructor>
@@ -453,7 +453,7 @@
                                     <version>25</version>
                                 </requireJavaVersion>
 
-                                <dependencyConvergence />
+                                <dependencyConvergence/>
 
                                 <requirePluginVersions>
                                     <message>Best Practice is to
